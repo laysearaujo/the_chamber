@@ -1,0 +1,50 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>The Chamber - Experimento Individual</title>
+    <style>
+        body {
+            margin: 0;
+            padding: 0;
+            background: #05050f;
+            font-family: 'Courier New', monospace;
+            color: #c8ffff;
+            overflow: hidden;
+        }
+        
+        #gameCanvas {
+            display: block;
+            margin: 0 auto;
+            background: #05050f;
+            cursor: pointer;
+        }
+        
+        .loading {
+            position: fixed;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%);
+            font-size: 24px;
+            color: #00c8ff;
+        }
+        
+        .error {
+            position: fixed;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%);
+            color: #ff3232;
+            text-align: center;
+            max-width: 600px;
+        }
+    </style>
+</head>
+<body>
+    <div id="loading" class="loading">Carregando The Chamber...</div>
+    <canvas id="gameCanvas" width="1000" height="700"></canvas>
+    
+    <script src="game.js"></script>
+</body>
+</html> 
