@@ -97,3 +97,61 @@ Com o ambiente virtual ativado e as dependências instaladas, execute o arquivo 
 
 ```bash
 python the_chamber.py
+```
+
+## 📊 Integração com Google Sheets
+
+O projeto agora inclui integração opcional com Google Sheets para salvar automaticamente os dados do experimento na nuvem.
+
+### Funcionalidades
+
+- **Salvamento Duplo**: Os dados são salvos tanto localmente (CSV) quanto no Google Sheets
+- **Backup Automático**: Se houver falha no Google Sheets, os dados locais servem como backup
+- **Tempo Real**: A planilha é atualizada automaticamente durante o experimento
+- **Configuração Simples**: Setup guiado com instruções detalhadas
+
+### Versões Disponíveis
+
+#### Versão 1 (`the_chamber.py`)
+- **Planilha ID**: `1PcAveY4HB4sAu-alSXaGArkqErY1Xa5J2VKZlM52xHs`
+- **Arquivo de saída**: `resultados_experimento.csv`
+- **Versão do experimento**: 1
+
+#### Versão 2 (`the_chamber_v2.py`)
+- **Planilha ID**: `1iEZZ6iUJqmyp8FDGZXw4nX_Q_1XQJWFmH1q3S0LenOg`
+- **Arquivo de saída**: `resultados_experimento_v2.csv`
+- **Versão do experimento**: 2
+
+### Configuração Rápida
+
+1. **Instalar dependências adicionais**:
+   ```bash
+   pip install -r requirements.txt
+   ```
+
+2. **Seguir o guia de configuração**:
+   - Leia `SETUP_GOOGLE_SHEETS.md` para instruções detalhadas
+   - Configure as credenciais do Google Cloud
+   - Crie e compartilhe as planilhas
+
+3. **Testar a integração**:
+   ```bash
+   # Para versão 1
+   python test_google_sheets.py
+   
+   # Para versão 2
+   python test_google_sheets_v2.py
+   ```
+
+4. **Executar o experimento**:
+   ```bash
+   # Para versão 1
+   python the_chamber.py
+   
+   # Para versão 2
+   python the_chamber_v2.py
+   ```
+
+### Estrutura dos Dados
+
+Os dados são organizados automaticamente na planilha com as mesmas colunas do arquivo CSV local, permitindo análise em tempo real e colaboração remota.

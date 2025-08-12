@@ -6,6 +6,14 @@ import time
 import csv
 import os
 
+# Importações para Google Sheets
+try:
+    from google_sheets_manager_v2 import GoogleSheetsManagerV2
+    GOOGLE_SHEETS_AVAILABLE = True
+except ImportError:
+    GOOGLE_SHEETS_AVAILABLE = False
+    print("⚠️  Módulo Google Sheets não disponível. Os dados serão salvos apenas localmente.")
+
 pygame.init()
 screen = pygame.display.set_mode((1000, 700))
 pygame.display.set_caption("The Chamber - Experimento Individual")
@@ -406,6 +414,19 @@ def main():
     player = demographics_screen(1)
     session_id = f"SESSAO_{int(time.time())}"
 
+    # Inicializa o gerenciador do Google Sheets se disponível
+    sheets_manager = None
+    if GOOGLE_SHEETS_AVAILABLE:
+        sheets_manager = GoogleSheetsManagerV2()
+        if sheets_manager.service:
+            print("\n📊 Google Sheets configurado com sucesso!")
+            if sheets_manager.test_connection():
+                print("✅ Conexão estabelecida com sucesso!")
+            else:
+                print("⚠️  Problemas na conexão com Google Sheets")
+                print("   Os dados serão salvos apenas localmente")
+                sheets_manager = None
+
     for current_case in CASE_POOL:
         collected_data = []
         player_votes_history = []
@@ -429,6 +450,7 @@ def main():
 
         final_revelation_screen(current_case)
 
+        # Salva dados localmente
         output_filename = "resultados_experimento_v2.csv"
         file_exists = os.path.isfile(output_filename)
 
@@ -440,14 +462,25 @@ def main():
                     if not file_exists or os.path.getsize(output_filename) == 0:
                         writer.writeheader()
                     writer.writerows(collected_data)
-                print(f"\n--- DADOS DA SESSÃO SALVOS COM SUCESSO EM '{output_filename}' ---")
+                print(f"\n--- DADOS DA SESSÃO SALVOS LOCALMENTE EM '{output_filename}' ---")
         except Exception as e:
-            print(f"\n--- ERRO AO SALVAR OS DADOS: {e} ---")
+            print(f"\n--- ERRO AO SALVAR OS DADOS LOCALMENTE: {e} ---")
             if collected_data:
                 headers = collected_data[0].keys()
                 print("\t".join(headers))
                 for row in collected_data:
                     print("\t".join(str(v) for v in row.values()))
+
+        # Tenta salvar no Google Sheets
+        if sheets_manager and sheets_manager.service:
+            try:
+                if sheets_manager.append_data(collected_data):
+                    print("📊 Dados também enviados para o Google Sheets com sucesso!")
+                else:
+                    print("⚠️  Falha ao enviar dados para o Google Sheets, mas dados locais foram salvos.")
+            except Exception as e:
+                print(f"⚠️  Erro ao enviar para Google Sheets: {e}")
+                print("   Os dados foram salvos localmente como backup.")
 
 if __name__ == "__main__":
     main()
